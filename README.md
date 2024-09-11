@@ -1,2 +1,2 @@
 # AulasTEP
-Repositório com todas as aulas de Tópicos Especiais de Programação.
+Repositório com todas as aulas de Tópicos Especiais em Programação.
