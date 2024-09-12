@@ -45,4 +45,6 @@ Search Tools GPTs
 .Audio para texto
 .Chat com Groq
 
+LLMs.pdf
+
 # Aula 3
