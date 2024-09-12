@@ -45,6 +45,6 @@ Search Tools GPTs
 .Audio para texto
 .Chat com Groq
 
-LLMs.pdf
+PDF de LLMs(https://github.com/ViniciusLGreco/AulasTEP/blob/main/LLMs.pdf)
 
 # Aula 3
