@@ -49,3 +49,9 @@ PDF de LLMs(https://github.com/ViniciusLGreco/AulasTEP/blob/main/LLMs.pdf)
 
 # Aula 3
 
+# Aula 6
+Chatbots com base de conhecimento - Dify
+
+
+
+
