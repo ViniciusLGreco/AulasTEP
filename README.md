@@ -62,6 +62,7 @@ Chatbots com base de conhecimento - Dify
 ![Imagem no repositório](./aula6/8.jpg)
 ![Imagem no repositório](./aula6/9.jpg)
 
-
+![Logo do GitHub](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
+https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula6/1.jpg
 
 
