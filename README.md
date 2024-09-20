@@ -62,6 +62,8 @@ Chatbots com base de conhecimento - Dify
 ![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula6/8.jpg)
 ![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula6/9.jpg)
 
+[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula6/RAG%20documents.json)
+[Ver o arquivo DataStax.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula6/datastax%20aula%2006.json)
 
 
 
