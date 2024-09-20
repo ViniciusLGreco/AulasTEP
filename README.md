@@ -52,6 +52,16 @@ PDF de LLMs(https://github.com/ViniciusLGreco/AulasTEP/blob/main/LLMs.pdf)
 # Aula 6
 Chatbots com base de conhecimento - Dify
 
+![Imagem no repositório](./aula6/1.png)
+![Imagem no repositório](./aula6/2.png)
+![Imagem no repositório](./aula6/3.png)
+![Imagem no repositório](./aula6/4.png)
+![Imagem no repositório](./aula6/5.png)
+![Imagem no repositório](./aula6/6.png)
+![Imagem no repositório](./aula6/7.png)
+![Imagem no repositório](./aula6/8.png)
+![Imagem no repositório](./aula6/9.png)
+
 
 
 
