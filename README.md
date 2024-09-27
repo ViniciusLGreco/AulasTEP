@@ -276,10 +276,11 @@ MYSQL_PASSWORD: Define a senha para o usuário não-root.
 Referência:
 https://blog.rocketseat.com.br/containerizando-uma-aplicacao-node-js-com-docker-um-guia-passo-a-passo/
 
-![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/1.jpg)
-![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/2.jpg)
-![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/3.jpg)
-![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/4.jpg)
+![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/1.jpg)
+![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/2.jpg)
+![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/3.jpg)
+![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/4.jpg)
 
-[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/RAG%20documents.json)
-[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/Aula7/TEP_-_CrewAI.json)
+[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/RAG%20documents.json)
+
+[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/TEP_-_CrewAI.json)
