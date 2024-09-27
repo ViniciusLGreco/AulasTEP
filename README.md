@@ -281,6 +281,6 @@ https://blog.rocketseat.com.br/containerizando-uma-aplicacao-node-js-com-docker-
 ![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/3.jpg)
 ![Print da aula](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/4.jpg)
 
-[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/RAG%20documents.json)
+[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/RAG%20Documentos.json)
 
-[Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/TEP_-_CrewAI.json)
+[Ver o arquivo CrewAI.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/TEP_-_CrewAI.json)
