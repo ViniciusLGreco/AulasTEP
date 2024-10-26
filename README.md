@@ -1112,3 +1112,612 @@ https://blog.rocketseat.com.br/containerizando-uma-aplicacao-node-js-com-docker-
 [Ver o arquivo RAG documents.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/RAG%20Documentos.json)
 
 [Ver o arquivo CrewAI.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/TEP_-_CrewAI.json)
+
+# Aula 8
+
+# Aula 8
+## FLuxo - Revenda
+
+### Formato de Resposta do Modelo - Json Schema
+
+```json
+{
+  "name": "carro_escolha",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "nome": {
+        "type": "string",
+        "description": "o nome da pessoa"
+      },
+      "carro": {
+        "type": "string",
+        "description": "o carro que o usuário escolheu, se não souber marque \"\""
+      },
+      "response": {
+        "type": "string",
+        "description": "Sua resposta para o usuário"
+      },
+      "etapa": {
+        "type": "integer",
+        "description": "o número da etapa em que você se encontra com descrito nas tags"
+      }
+    }
+  }
+}
+```
+
+Prompt LLM 1
+
+```xml
+<contexto>
+Seu nome é Clara, você trabalha na Concecionaria Auto Carros.
+No inicio da conversa, envie sempre a logo da loja, no formato markdown:
+
+!["Auto Carros"](https://www.veiculoaqui.com.br/fotos_lojas/loja20231122131932721_535130177.jpeg)
+
+
+Você deve orientar o usuário a encontrar o carro ideal.
+</contexto>
+
+<etapas>
+1. Solicite o nome do usuário
+2. Pergunte para que tipo de uso será o carro
+3. Faça poucas perguntas para identificar o carro ideal para o cliente
+4. Sugira um carro ou uma lista de carros com base no perfil dele
+5. Assim que o usuário escolher o carro, agradeça e diga que irá encaminhá-lo para o Gerente Caetano, que irá agendar um teste Drive.
+</etapas> 
+
+<response_format>
+Responda no formato JSON com os seguintes campos:
+response - Sua resposta para o usuário
+carro - o carro que o usuário escolheu, se não souber marque ""
+nome - o nome do usuário, se não souber, marque ""
+etapa - o número da etapa em que você se encontra com descrito nas tags <etapas>
+
+</response_format>
+```
+
+Prompt LLM 2
+
+```xml
+<contexto>
+Seu nome é Caetano e você é responsável por agendar o teste drive com o cliente em nossa concessionária.
+</contexto>
+
+<etapas>
+1. Pergunte o endereço do usuário
+2. Sugira os próximos dois dias para agendamento, hoje é {{ data_atual }}, {{ dia_da_semana }}.
+3. Sugira dois horários, um de manhã e outro de tarde.
+4. Agradeça ao usuário e diga que irá aguardá-lo.
+
+</etapas>
+```
+
+Código: Pegar a data atual
+
+```python
+from datetime import datetime
+def main() -> dict:
+    # Dicionário para mapear os dias da semana em português
+    days_of_week = {
+        0: "Segunda-feira",
+        1: "Terça-feira",
+        2: "Quarta-feira",
+        3: "Quinta-feira",
+        4: "Sexta-feira",
+        5: "Sábado",
+        6: "Domingo"
+    }
+
+    # Obtém a data atual
+    current_date = datetime.now()
+
+    # Formata a data no formato dd/mm/aaaa
+    formatted_date = current_date.strftime("%d/%m/%Y")
+
+    # Obtém o dia da semana em português
+    day_of_week = days_of_week[current_date.weekday()]
+
+    # Retorna a data e o dia da semana
+    return {
+        "data_atual": formatted_date,
+        "dia_da_semana": day_of_week
+    }
+```
+
+2024-10-11T08:00:00.000Z
+
+2024-10-14T08:00:00.000Z
+
+2024-10-14T09:00:00.000Z
+
+2024-10-14T10:00:00.000Z
+
+# Aula 9
+# Aula 9
+
+
+Implementação de chatbot/Agent no Dify
+Uso de ferramentas para acessar a API do Cal.com
+
+```xml
+<Agent>
+  <contexto>
+  Na Clínica Médica Saúde Total, oferecemos serviços completos de fisioterapia voltados à recuperação e ao bem-estar dos nossos pacientes. O Dr. Benevid Felix da Silva, especialista na área, está à disposição para proporcionar tratamentos personalizados, incluindo:
+
+Reabilitação Muscular e Articular: Tratamentos para alívio de dores e recuperação de movimentos em lesões, pós-operatórios e condições crônicas.
+Terapias Preventivas: Fisioterapia preventiva para fortalecer músculos, melhorar a postura e evitar futuras lesões.
+Tratamento de Condições Neuromusculares: Reabilitação focada em pacientes com doenças neurológicas, como AVC, esclerose múltipla e Parkinson.
+Fisioterapia Ortopédica: Cuidados especializados para recuperação de fraturas, torções e problemas ortopédicos.
+Nosso objetivo é melhorar a qualidade de vida dos pacientes por meio de tratamentos eficazes e personalizados.
+  </contexto>
+  
+  
+  
+    <Description>
+        O agente virtual da Clínica Médica Saúde Total é projetado para ajudar pacientes com agendamentos de consultas, fornecimento de informações sobre serviços médicos, esclarecimento de dúvidas e gerenciamento de registros de pacientes.
+    </Description>
+
+    <Language>pt-BR</Language>
+
+<Hour>
+Utilize como padrão o fuso horário GMT -4, descontando e atualizando a hora fornecida pela ferramenta current_time, que está em GMT 0.  Não dê informações sobre o fuso, apenas informe horas. 
+</Hour>
+
+<weekday>
+Utilize o GMT -4 para informar o dia da semana, considerando que a ferramenta current_time está em GMT 0. Faça os cálculos de horas a menos para informar o dia correto.
+</weekday>
+ 
+<CommunicationStyle>
+        <Tone>Calmo e acolhedor</Tone>
+        <Formality>Formal</Formality>
+</CommunicationStyle>
+    
+<etapas>
+1. Solicite o nome da pessoa, email e telefone. Esses dados são necessários para fazer o agendamento da consulta.
+2. Pergunte para que dia deseja agendar a consulta.
+3. Faça poucas perguntas para identificar os dados junto ao cliente
+4. Sugira uma data com base na lista de slots vagos. Os slots vagos para agendamento podem ser consultados utilizando a ferramenta get_slots_cal_com.
+5. Assim que o usuário escolher o horário, faça o agendamento utilizando a ferramenta criar_agendamento_cal_com. Confirme o agendamento com a ferramenta get_bookings_cal_com.
+6.Ao confirmar o agendamento
+</etapas> 
+
+
+</Agent>
+```
+
+
+## Definição dos temas dos trabalhos
+
+🚀 Proposta de Tema para Trabalho de Tópicos Especiais em Programação 🚀
+
+## 📝 Informações Básicas
+
+- **Nome do Aluno(s):** [Nome do Aluno 1], [Nome do Aluno 2], ...
+
+## 🎯 Tema Proposto
+
+### 📌 Título do Projeto
+
+[Insira o título do projeto aqui]
+
+### 📌 Descrição do Projeto
+
+[Descreva o tema proposto de forma clara e concisa. Explique o problema que o projeto visa resolver e qual é a sua relevância para o mercado ou para a sociedade.]
+
+### 📌 Objetivos
+
+[Liste os objetivos principais do projeto. Por exemplo, automatizar um processo específico, melhorar a eficiência de um sistema, etc.]
+
+### 📌 Ferramentas e Tecnologias Sugeridas
+
+[Liste as ferramentas e tecnologias que vocês planejam utilizar para desenvolver o projeto. Exemplos: LLM, RAG, Langchain, Dify, N8N, etc.]
+
+### 📌 Funcionalidades Principais
+
+[Descreva as principais funcionalidades que o sistema ou aplicativo terá. Use uma lista para facilitar a visualização.]
+
+- Funcionalidade 1: [Descrição da funcionalidade 1]
+- Funcionalidade 2: [Descrição da funcionalidade 2]
+- Funcionalidade 3: [Descrição da funcionalidade 3]
+- ...
+
+### 📌 Atividades por Membro da Equipe
+
+[Especifique as atividades que cada membro da equipe irá desenvolver. Isso ajuda a garantir que todas as partes do projeto sejam cobertas.]
+
+- **[Nome do Aluno 1]:** [Atividade 1], [Atividade 2], ...
+- **[Nome do Aluno 2]:** [Atividade 1], [Atividade 2], ...
+- ...
+
+### 📌 Cronograma Preliminar
+
+[Proponha um cronograma preliminar para o desenvolvimento do projeto. Use uma tabela para listar as principais etapas e prazos.]
+
+| Etapa | Descrição              | Prazo  | Responsável(eis)   |
+| ----- | ---------------------- | ------ | ------------------ |
+| 1     | [Descrição da Etapa 1] | [Data] | [Nome do Aluno(s)] |
+| 2     | [Descrição da Etapa 2] | [Data] | [Nome do Aluno(s)] |
+| ...   | ...                    | ...    | ...                |
+
+### 📌 Referências
+
+[Liste as principais referências que vocês utilizarão para desenvolver o projeto. Isso pode incluir artigos, documentações de APIs, tutoriais, etc.]
+
+- Referência 1: [Descrição da Referência 1]
+- Referência 2: [Descrição da Referência 2]
+- ...
+
+## 📬 Envio da Proposta
+
+Enviar através do SIGAA, na Tarefa correspondente. Caso tenha dúvidas, encaminhe via whatsapp professor antes de submeter a tarefa.
+
+---
+
+**Observação:** Certifique-se de que a proposta esteja clara, detalhada e coerente com os objetivos do trabalho de Tópicos Especiais em Programação. A equipe avaliará a viabilidade e a relevância do tema proposto.
+
+# Aula 10
+# Aula 10
+
+Instalação do N8n
+
+
+## APIS do WhatsApp
+### go-whatsapp-web-multidevice
+
+- Send WhatsApp message via http API, 
+- [docs/openapi.yml](https://github.com/aldinokemal/go-whatsapp-web-multidevice/blob/main/docs/openapi.yaml) for more details
+- Compress image before send
+- Compress video before send
+
+Arquivo: docker-compose.yaml
+
+```bash
+version: '3.9'
+services:
+  whatsapp_go:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    image: "aldinokemal2104/go-whatsapp-web-multidevice:latest"
+    build:
+      context: .
+      dockerfile: ./docker/golang.Dockerfile
+    restart: 'always'
+    ports:
+      - "3100:3000"
+    environment:
+      - WEBHOOK="https://n8n.semcodigo.edu.pl/webhook-test/consultavendas"
+    volumes:
+      - whatsapp_data:/app/storages
+
+volumes:
+  whatsapp_data:
+```
+
+
+
+
+```bash
+sudo docker run --detach --publish=3001:3000 --name=whatsapp2 --restart=always --volume=$(sudo docker volume create --name=whatsapp2):/app/storages aldinokemal2104/go-whatsapp-web-multidevice --autoreply="Don't reply this message please" --webhook="http://localhost:5678/webhook-test/whats"
+```
+
+
+### Evolution
+
+
+A Evolution API v2 está pronta para o Docker e pode ser facilmente implantada com Docker no modo standalone ou swarm. O repositório oficial do Evolution API contém todos os arquivos de composição necessários para instalar e executar a API.
+
+Originalmente, a **Evolution API** começou como uma API de controle de WhatsApp baseada no CodeChat, utilizando a biblioteca Baileys. Com o tempo, a plataforma se expandiu para suportar não apenas o WhatsApp, mas também integrações com serviços como **Typebot, Chatwoot, Dify e OpenAI**. Além disso, a Evolution API suporta tanto a API de WhatsApp baseada no Baileys quanto a API oficial do WhatsApp Business, com suporte futuro planejado para Instagram e Messenger.
+
+Processo de Instalação: 
+- https://doc.evolution-api.com/v2/pt/install/docker
+
+
+O banco de dados é uma parte fundamental da Evolution API v2, responsável por armazenar todas as informações críticas da aplicação. A API suporta tanto PostgreSQL quanto MySQL, utilizando o Prisma como ORM (Object-Relational Mapping) para facilitar a interação com esses bancos de dados.
+
+A maneira mais fácil e rápida de configurar um banco de dados para a Evolution API v2 é através do Docker. Abaixo estão as instruções para configurar tanto o PostgreSQL quanto o MySQL usando Docker Compose.
+
+##### Instalação do Postgres
+
+Para configurar o PostgreSQL via Docker, siga os passos abaixo:
+
+1. Baixe o arquivo `docker-compose.yaml` para o PostgreSQL disponível [aqui](https://github.com/EvolutionAPI/evolution-api/blob/v2.0.0/Docker/postgres/docker-compose.yaml).
+
+```bash
+version: '3.3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    networks:
+      - evolution-net
+    command: ["postgres", "-c", "max_connections=1000"]
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=PASSWORD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    networks:
+      - evolution-net
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=EMAIL
+      - PGADMIN_DEFAULT_PASSWORD=PASSWORD  
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - 4000:80
+    links:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+
+networks:
+  evolution-net:
+    name: evolution-net
+    driver: bridge
+```
+
+
+No meu caso, com base nas listas de redes disponíveis no docker - já com outras ferramentas instanciadas, como n8n, Dify e Langflow tive que **alterar a porta e também a subrede**.
+
+```bash
+version: '3.3'
+
+services:
+postgres:
+    container_name: postgres
+    image: postgres:15
+    networks:
+      - evolution-net
+    command: ["postgres", "-c", "max_connections=1000"]
+    restart: always
+    ports:
+      - 5433:5432  # Mapeia a porta 5433 no host para a porta 5432 no contêiner
+    environment:
+      - POSTGRES_PASSWORD=8H4a10032024
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432  # Mantém a porta 5432 para exposição interna
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    networks:
+      - evolution-net
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=benevid@unemat.br
+      - PGADMIN_DEFAULT_PASSWORD=8H4a10032024  
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - 4000:80
+    links:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+
+networks:
+  evolution-net:
+    name: evolution-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+```
+
+No meu caso tive que rodar o seguinte comando para criar o banco de dados:
+
+```bash
+docker-compose up -d
+docker exec -it postgres psql -U postgres -c "CREATE DATABASE evolution;"
+```
+
+Variáveis de ambiente para habilitar no `.env`
+
+```bash
+# Habilitar o uso do banco de dados
+DATABASE_ENABLED=true
+
+# Escolher o provedor do banco de dados: postgresql ou mysql
+DATABASE_PROVIDER=postgresql
+
+# URI de conexão com o banco de dados
+DATABASE_CONNECTION_URI='postgresql://user:pass@localhost:5432/evolution?schema=public'
+
+# Nome do cliente para a conexão do banco de dados
+DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
+
+# Escolha os dados que você deseja salvar no banco de dados da aplicação
+DATABASE_SAVE_DATA_INSTANCE=true
+DATABASE_SAVE_DATA_NEW_MESSAGE=true
+DATABASE_SAVE_MESSAGE_UPDATE=true
+DATABASE_SAVE_DATA_CONTACTS=true
+DATABASE_SAVE_DATA_CHATS=true
+DATABASE_SAVE_DATA_LABELS=true
+DATABASE_SAVE_DATA_HISTORIC=true
+
+```
+
+
+### Instalação do Redis
+O Redis é utilizado pela Evolution API v2 como um sistema de cache para otimizar o desempenho e a velocidade da aplicação. Ele pode ser configurado para armazenar informações temporárias e melhorar a eficiência das operações.
+
+Para configurar o Redis via Docker, siga os passos abaixo:
+
+1. Baixe o arquivo `docker-compose.yaml` para o Redis disponível [aqui](https://github.com/EvolutionAPI/evolution-api/blob/v2.0.0/Docker/redis/docker-compose.yaml).
+2. Navegue até o diretório onde o arquivo foi baixado e execute o comando:
+
+```bash
+docker-compose up -d
+```
+
+```bash
+version: '3.3'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: >
+      redis-server --port 6379 --appendonly yes
+    volumes:
+      - evolution_redis:/data
+    ports:
+      - 6380:6379
+
+volumes:
+  evolution_redis:
+
+networks:
+  evolution-net:
+    name: evolution-net
+    driver: bridge
+```
+
+
+Variáveis de ambiente para habilitar no `.env`
+
+```bash
+# Habilitar o cache Redis
+CACHE_REDIS_ENABLED=true
+
+# URI de conexão com o Redis
+CACHE_REDIS_URI=redis://localhost:6379/6
+
+# Prefixo para diferenciar os dados de diferentes instalações que utilizam o mesmo Redis
+CACHE_REDIS_PREFIX_KEY=evolution
+
+# Habilitar para salvar as informações de conexão no Redis ao invés do banco de dados
+CACHE_REDIS_SAVE_INSTANCES=false
+
+# Habilitar o cache local
+CACHE_LOCAL_ENABLED=false
+```
+
+
+**Instalação da Evolution**
+
+
+```bash
+version: '3.9'
+services:
+  evolution-api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v2.1.1
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+
+volumes:
+  evolution_instances:
+
+```
+
+No meu tive que mudar a porta de saída porque dava choque com outra ferramenta. Ficando assim:
+
+```bash
+version: '3.9'
+services:
+  evolution-api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v2.0.9-rc
+    restart: always
+    ports:
+      - "8081:8080" # Mapeia 8081 (host) p/ 8080 (contêiner)
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+
+volumes:
+  evolution_instances:
+```
+
+Em seguida, crie um arquivo `.env` no mesmo diretório com o seguinte conteúdo mínimo:
+
+```bash
+AUTHENTICATION_API_KEY=mude-me
+```
+
+
+Arquivo final do `.env`
+
+```bash
+## ------------------- BANCO DE DADOS -----------------------
+# Habilitar o uso do banco de dados
+DATABASE_ENABLED=true
+
+# Escolher o provedor do banco de dados: postgresql ou mysql
+DATABASE_PROVIDER=postgresql
+
+# URI de conexão com o banco de dados
+DATABASE_CONNECTION_URI='postgresql://postgres:8H4a10032024@5.78.105.1:5433/evolution?schema=public'
+# Nome do cliente para a conexão do banco de dados
+DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
+
+# Escolha os dados que você deseja salvar no banco de dados da aplicação
+DATABASE_SAVE_DATA_INSTANCE=true
+DATABASE_SAVE_DATA_NEW_MESSAGE=true
+DATABASE_SAVE_MESSAGE_UPDATE=true
+DATABASE_SAVE_DATA_CONTACTS=true
+DATABASE_SAVE_DATA_CHATS=true
+DATABASE_SAVE_DATA_LABELS=true
+DATABASE_SAVE_DATA_HISTORIC=true
+
+## ----------------------- REDIS -------------------
+
+# Habilitar o cache Redis
+CACHE_REDIS_ENABLED=true
+
+# URI de conexão com o Redis
+CACHE_REDIS_URI=redis://5.78.105.1:6380/6
+
+# Prefixo para diferenciar os dados de diferentes instalações que utilizam o mesmo Redis
+CACHE_REDIS_PREFIX_KEY=evolution
+
+# Habilitar para salvar as informações de conexão no Redis ao invés do banco de dados
+CACHE_REDIS_SAVE_INSTANCES=false
+
+# Habilitar o cache local
+CACHE_LOCAL_ENABLED=false
+
+AUTHENTICATION_API_KEY=bccb5913-0ba2-41e9-b67c-05dca0be1791
+```
+
+
+Iniciar o evolution
+
+```bash
+docker compose up -d
+docker logs evolution_api
+```
+
+
+
+```json
+{ "slots": { "2024-10-28": [ { "time": "2024-10-28T12:00:00.000Z" }, { "time": "2024-10-28T13:00:00.000Z" }, { "time": "2024-10-28T14:00:00.000Z" }, { "time": "2024-10-28T15:00:00.000Z" }, { "time": "2024-10-28T16:00:00.000Z" }, { "time": "2024-10-28T17:00:00.000Z" }, { "time": "2024-10-28T18:00:00.000Z" }, { "time": "2024-10-28T19:00:00.000Z" }, { "time": "2024-10-28T20:00:00.000Z" } ], "2024-10-29": [ { "time": "2024-10-29T17:00:00.000Z" }, { "time": "2024-10-29T18:00:00.000Z" }, { "time": "2024-10-29T19:00:00.000Z" }, { "time": "2024-10-29T20:00:00.000Z" } ], "2024-10-30": [ { "time": "2024-10-30T12:00:00.000Z" }, { "time": "2024-10-30T13:00:00.000Z" }, { "time": "2024-10-30T14:00:00.000Z" }, { "time": "2024-10-30T15:00:00.000Z" }, { "time": "2024-10-30T16:00:00.000Z" }, { "time": "2024-10-30T17:00:00.000Z" }, { "time": "2024-10-30T18:00:00.000Z" }, { "time": "2024-10-30T19:00:00.000Z" }, { "time": "2024-10-30T20:00:00.000Z" } ] } }
+```
+
+Joao Carlos, joaoc@gmail.com, (66) 99233-0909
