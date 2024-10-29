@@ -1113,7 +1113,6 @@ https://blog.rocketseat.com.br/containerizando-uma-aplicacao-node-js-com-docker-
 
 [Ver o arquivo CrewAI.json](https://github.com/ViniciusLGreco/AulasTEP/blob/main/aula7/TEP_-_CrewAI.json)
 
-# Aula 8
 
 # Aula 8
 ## FLuxo - Revenda
