@@ -1234,7 +1234,6 @@ def main() -> dict:
 2024-10-14T10:00:00.000Z
 
 # Aula 9
-# Aula 9
 
 
 Implementação de chatbot/Agent no Dify
@@ -1356,7 +1355,6 @@ Enviar através do SIGAA, na Tarefa correspondente. Caso tenha dúvidas, encamin
 
 **Observação:** Certifique-se de que a proposta esteja clara, detalhada e coerente com os objetivos do trabalho de Tópicos Especiais em Programação. A equipe avaliará a viabilidade e a relevância do tema proposto.
 
-# Aula 10
 # Aula 10
 
 Instalação do N8n
@@ -1719,4 +1717,3 @@ docker logs evolution_api
 { "slots": { "2024-10-28": [ { "time": "2024-10-28T12:00:00.000Z" }, { "time": "2024-10-28T13:00:00.000Z" }, { "time": "2024-10-28T14:00:00.000Z" }, { "time": "2024-10-28T15:00:00.000Z" }, { "time": "2024-10-28T16:00:00.000Z" }, { "time": "2024-10-28T17:00:00.000Z" }, { "time": "2024-10-28T18:00:00.000Z" }, { "time": "2024-10-28T19:00:00.000Z" }, { "time": "2024-10-28T20:00:00.000Z" } ], "2024-10-29": [ { "time": "2024-10-29T17:00:00.000Z" }, { "time": "2024-10-29T18:00:00.000Z" }, { "time": "2024-10-29T19:00:00.000Z" }, { "time": "2024-10-29T20:00:00.000Z" } ], "2024-10-30": [ { "time": "2024-10-30T12:00:00.000Z" }, { "time": "2024-10-30T13:00:00.000Z" }, { "time": "2024-10-30T14:00:00.000Z" }, { "time": "2024-10-30T15:00:00.000Z" }, { "time": "2024-10-30T16:00:00.000Z" }, { "time": "2024-10-30T17:00:00.000Z" }, { "time": "2024-10-30T18:00:00.000Z" }, { "time": "2024-10-30T19:00:00.000Z" }, { "time": "2024-10-30T20:00:00.000Z" } ] } }
 ```
 
-Joao Carlos, joaoc@gmail.com, (66) 99233-0909
